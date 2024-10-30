@@ -4,20 +4,29 @@ from app import app
 from models import db, Bakery, BakedGood
 
 with app.app_context():
-
+    # Clear existing data
     BakedGood.query.delete()
     Bakery.query.delete()
     
-    bakeries = []
-    bakeries.append(Bakery(name='Delightful donuts'));
-    bakeries.append(Bakery(name='Incredible crullers'));
-    db.session.add_all(bakeries)
+    # Create bakeries
+    bakery1 = Bakery(name='Delightful Donuts')
+    bakery2 = Bakery(name='Incredible Crullers')
+    
+    # Add bakeries to the session
+    db.session.add(bakery1)
+    db.session.add(bakery2)
+    db.session.commit()  # Commit to save the bakeries to the database
 
-    baked_goods = []
-    baked_goods.append(BakedGood(name='Chocolate dipped donut', price=2.75, bakery=bakeries[0]));
-    baked_goods.append(BakedGood(name='Apple-spice filled donut', price=3.50, bakery=bakeries[0]));
-    baked_goods.append(BakedGood(name='Glazed honey cruller', price=3.25, bakery=bakeries[1]));
-    baked_goods.append(BakedGood(name='Chocolate cruller', price=3.40, bakery=bakeries[1]));
+    # Create baked goods associated with the bakeries
+    baked_goods = [
+        BakedGood(name='Chocolate Dipped Donut', price=2.75, bakery_id=bakery1.id),
+        BakedGood(name='Apple-Spice Filled Donut', price=3.50, bakery_id=bakery1.id),
+        BakedGood(name='Glazed Honey Cruller', price=3.25, bakery_id=bakery2.id),
+        BakedGood(name='Chocolate Cruller', price=3.40, bakery_id=bakery2.id)
+    ]
 
+    # Add baked goods to the session
     db.session.add_all(baked_goods)
-    db.session.commit()
+    db.session.commit()  # Commit to save the baked goods to the database
+
+    print("Database seeded successfully!")
